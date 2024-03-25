@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Recall {
+  recallNumber       Int       @id @default(autoincrement())
+  manufacturer       String    @db.VarChar(255)
+  productName        String    @db.VarChar(255)
+  hazardDescription  String?   @db.Text
+  recallDate         DateTime  @db.DateTime(0)
+  category           String    @db.VarChar(255)
+  employeeID         Int
+  shortlisted        Boolean   @default(false)
+  dateOfAction       DateTime? @db.DateTime(0)
+  recallURL          String?   @db.VarChar(255)
+  unitsInCirculation Int
+  User               User      @relation(fields: [employeeID], references: [employeeID], onDelete: NoAction, map: "Recall_ibfk_1")
+
+  @@index([employeeID], map: "employeeID")
+}
+
+model User {
+  employeeID      Int       @id @default(autoincrement())
+  role            User_role
+  name            String    @db.VarChar(255)
+  email           String    @unique(map: "email") @db.VarChar(255)
+  contactNumber   String    @db.VarChar(255)
+  permissionLevel String    @db.VarChar(255)
+  password        String    @db.VarChar(255)
+  Recall          Recall[]
+}
+
+enum User_role {
+  Investigator
+  Manager
+}
