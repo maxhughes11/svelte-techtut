@@ -3,7 +3,7 @@ import type { PageData } from "./$types";
 export let data: PageData;
 </script>
 
-<h1>Manage Recalls</h1>
+<h1>Hello, {data.user.name}. Welcome to Manage Recalls</h1>
 
 <div>
 

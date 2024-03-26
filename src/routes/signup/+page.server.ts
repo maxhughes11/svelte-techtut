@@ -1,13 +1,14 @@
 import prisma from "$lib/prisma";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 import type { User_role } from "@prisma/client";
+import type { Cookies } from "@sveltejs/kit";
 
 export const actions =  {
 
 
 
-    signup: async ({ request }) => {
+    default: async ({ request, cookies }) => {
         const data = await request.formData();
         let email = data.get("email") as string;
         let password = data.get("password") as string;
@@ -17,7 +18,7 @@ export const actions =  {
 
 
 
-        await prisma.user.create({
+        const newUser = await prisma.user.create({
             data: {
                 email: email,
                 password: password,
@@ -26,6 +27,9 @@ export const actions =  {
                 contactNumber: contact,
                 permissionLevel: "New user"
             }
-        })
+        })                                            
+
+        cookies.set("user", JSON.stringify(newUser), {path: "/"})
+        redirect(303, "/")
     }
 } satisfies Actions

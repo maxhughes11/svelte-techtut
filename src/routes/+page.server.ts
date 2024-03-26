@@ -4,7 +4,7 @@ import type { Actions } from "./$types";
 import { User_role } from "@prisma/client";
 
 export const actions = {
-    login: async ({ request }) => {
+    login: async ({ request, cookies }) => {
         const data = await request.formData();
         let email = data.get("email") as string;
         let password = data.get("password") as string;
@@ -18,6 +18,7 @@ export const actions = {
 
         if (result?.role == User_role.Manager)
         {
+            cookies.set("user", JSON.stringify(result), {path: "/"})
             redirect(303, "/manage-recalls")
         }
     }

@@ -1,7 +1,7 @@
 
 <h1>Sign up for a new CPSC Account</h1>
 
-<form>
+<form method="post">
     <label for="email">Your email:</label>
     <input name="email" type="email" required>
 
